@@ -8,8 +8,12 @@ type IProps<T> = {
 export default function useLocalStorage<T>({ key, initialValue }: IProps<T>) {
   const [state, setState] = useState<Set<T>>(
     (() => {
-      const storedValue = localStorage.getItem(key);
-      return new Set(storedValue ? JSON.parse(storedValue) : initialValue);
+      try {
+        const storedValue = localStorage.getItem(key);
+        return new Set(storedValue ? JSON.parse(storedValue) : initialValue);
+      } catch (e) {
+        return new Set(initialValue);
+      }
     })()
   );
 
